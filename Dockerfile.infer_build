@@ -1,0 +1,17 @@
+FROM debian:latest
+MAINTAINER remi.huguet@ensiie.fr
+
+RUN apt-get -y update && \
+     apt-get -y install  git wget \
+     autoconf \
+     opam pkg-config ocaml-native-compilers ocaml-findlib menhir libmenhir-ocaml-dev libpcre-ocaml-dev libparmap-ocaml-dev texlive-fonts-extra \
+     openjdk-11-jre openjdk-11-jdk \
+     libgmp-dev libsqlite3-dev zlib1g-dev  libmpfr-dev
+
+
+RUN opam init --reinit --bare --disable-sandboxing --yes --auto-setup
+
+RUN git clone https://github.com/facebook/infer.git && cd infer && \ 
+     eval $(opam env) && \ 
+     ./build-infer.sh java && \ 
+     make install
