@@ -110,7 +110,7 @@ RUN git clone https://github.com/saeg/road2fault && \
 # Linking 
 
 ## DMalloc
-RUN ln -s dmalloc/dmalloc /usr/bin/dmalloc || cp dmalloc/dmalloc /usr/bin/dmalloc \
+RUN ln -s dmalloc/dmalloc /usr/bin/dmalloc || cp dmalloc/dmalloc /usr/bin/dmalloc
 
 ## gzoltar
 RUN alias gzoltar='java -jar /home/hug211mire/gzoltar/lib/gzoltarcli.jar' 
@@ -119,11 +119,11 @@ RUN alias gzoltar='java -jar /home/hug211mire/gzoltar/lib/gzoltarcli.jar'
 
 # Testing 
 
-gcov --version
-gcovr --version
-lcov --version
-dmalloc --version
-defects4j info -p Lang
-gzoltar version
+RUN gcov --version
+RUN gcovr --version
+RUN lcov --version
+RUN dmalloc --version
+RUN defects4j info -p Lang
+RUN gzoltar version
 
 
