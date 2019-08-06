@@ -1,4 +1,4 @@
-FROM debian:stretch-slim
+FROM debian:stretch
 LABEL maintainer "Rémi HUGUET"
 
 #### DYNAMIC ANALYSIS ### 
@@ -13,14 +13,19 @@ LABEL maintainer "Rémi HUGUET"
 
 
 
-# dependencies
-
-RUN apt-get -y install \ 
-    gcc make cmake autoconf \
+# dependency
+RUN apt-get update && \
+    mkdir -p /usr/share/man/man1 && \    
+    apt-get install -y \ 
+    git wget curl \
+    gcc g++ make \
+    build-essential  \
+    cmake autoconf \
+    openjdk-11-jdk openjdk-11-jre \
     gcovr lcov \ 
     libdbi-perl \
     unzip \ 
-    ant 
+    ant  
 
 
 
@@ -34,7 +39,7 @@ RUN apt-get -y install \
 ### Google Test
 
 RUN git clone https://github.com/google/googletest && \
-    mkdir build && cd build && \
+    cd googletest && mkdir build && cd build && \
     cmake ../ && make
 
 
@@ -61,8 +66,13 @@ RUN git clone https://github.com/google/googletest && \
 
 ## DMalloc
 
-RUN git clone https://github.com/j256/dmalloc && \ 
-    cd dmalloc && ./configure && make 
+# ERROR due to incompatibility between -O2 gcc optimization and strndup of string.h...
+#RUN wget http://dmalloc.com/releases/dmalloc-5.5.2.tgz && \ 
+#    tar -xvf dmalloc-5.5.2.tgz  && cd dmalloc-5.5.2 && \
+#    ./configure && make 
+
+# so we install the apt release.
+RUN apt-get install -y libdmalloc5
 
 
 ## Valgrind
