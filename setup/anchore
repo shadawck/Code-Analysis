@@ -2,12 +2,12 @@
 # Start anchore-engine images with compose and install anchore-cli for interaction
 
 # On crée un dossier anchore pour le projet...
-mkdir build/anchore/ && cd build/anchore/
-mkdir config 
+mkdir -p ../build/anchore/ && cd ../build/anchore/
+mkdir -p config 
 # ... et on y crée un dossier config dans lequel on DL le config.yaml
 cd config && curl -O https://raw.githubusercontent.com/anchore/anchore-engine/master/scripts/docker-compose/config.yaml
 # Puis dans le dossier anchore, on crée un dossier db pour notre base de donnée.
-cd .. && mkdir db 
+cd .. && mkdir -p  db 
 # On télécharge ensuite le docker-compose.yaml dans le dossier anchore/
 curl -O https://raw.githubusercontent.com/anchore/anchore-engine/master/scripts/docker-compose/docker-compose.yaml
 
@@ -30,3 +30,5 @@ ANCHORE_CLI_PASS=foobar
 export ANCHORE_CLI_URL
 export ANCHORE_CLI_USER
 export ANCHORE_CLI_PASS
+
+rm -rf .git .gitignore 

@@ -5,3 +5,4 @@
 cd ../build && git clone https://github.com/hadolint/hadolint 
 # dd Dockerfile in root dir to have correct path 
 cd hadolint && cp docker/Dockerfile ./
+rm -rf .git .gitignore .github

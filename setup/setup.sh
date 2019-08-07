@@ -9,7 +9,7 @@
 
 ###### INIT #####
 chmod +x ./*
-
+rm -rf ../build/*
 
 
 
