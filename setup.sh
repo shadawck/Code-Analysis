@@ -1,0 +1,44 @@
+#!/bin/bash
+
+
+
+####################
+# SETUP SECOPS VM ##
+###################
+
+
+## ANCHORE
+# Start anchore-engine images with compose and install anchore-cli for interaction
+
+# On crée un dossier anchore pour le projet...
+mkdir ~/anchore/ && cd ~/anchore/
+mkdir config 
+# ... et on y crée un dossier config dans lequel on DL le config.yaml
+cd config && curl -O https://raw.githubusercontent.com/anchore/anchore-engine/master/scripts/docker-compose/config.yaml
+# Puis dans le dossier anchore, on crée un dossier db pour notre base de donnée.
+cd .. && mkdir db && cd .. 
+# On télécharge ensuite le docker-compose.yaml dans le dossier anchore/
+curl -O https://raw.githubusercontent.com/anchore/anchore-engine/master/scripts/docker-compose/docker-compose.yaml
+
+# On pull anchore-db et anchore-engine
+docker-compose pull
+# On run anchore engine en silent-mode 
+docker-compose up -d
+
+# On installe ensuite anchore cli via pip 
+sudo apt-get update
+sudo pip install anchorecli
+source ~/.profile
+anchore-cli --version
+
+# On export ensuite quelques variable 
+ANCHORE_CLI_URL=http://localhost:8228/v1
+ANCHORE_CLI_USER=admin
+ANCHORE_CLI_PASS=foobar
+export ANCHORE_CLI_URL
+export ANCHORE_CLI_USER
+export ANCHORE_CLI_PASS
+
+
+## DOCKER-BENCH
+
