@@ -1,5 +1,5 @@
 FROM debian:stretch
-LABEL maintainer "Rémi HUGUET"
+LABEL maintainer "Remi HUGUET"
 
 #### DYNAMIC ANALYSIS ### 
 
@@ -10,7 +10,6 @@ LABEL maintainer "Rémi HUGUET"
 ################################################
 ## For release see Dockerfile.dynamic_release ##
 ################################################
-
 
 
 # dependency
@@ -35,8 +34,6 @@ RUN apt-get update && \
 #################
 # Code coverage #
 #################
-
-### Google Test
 
 RUN git clone https://github.com/google/googletest && \
     cd googletest && mkdir build && cd build && \

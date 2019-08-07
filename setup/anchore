@@ -1,12 +1,3 @@
-#!/bin/bash
-
-
-
-####################
-# SETUP SECOPS VM ##
-###################
-
-
 ## ANCHORE
 # Start anchore-engine images with compose and install anchore-cli for interaction
 
@@ -29,7 +20,7 @@ docker-compose up -d
 sudo apt-get update
 sudo pip install anchorecli
 source ~/.profile
-anchore-cli --version
+#anchore-cli --version
 
 # On export ensuite quelques variable 
 ANCHORE_CLI_URL=http://localhost:8228/v1
@@ -38,7 +29,3 @@ ANCHORE_CLI_PASS=foobar
 export ANCHORE_CLI_URL
 export ANCHORE_CLI_USER
 export ANCHORE_CLI_PASS
-
-
-## DOCKER-BENCH
-

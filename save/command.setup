@@ -1,0 +1,34 @@
+docker build -t dynamic -f Dockerfile.dynamic_build .
+docker build -t static -f Dockerfile.static_build .
+
+
+docker build -t dynamic -f Dockerfile.dynamic_release .
+docker build -t static -f Dockerfile.static_release .
+
+
+--- 
+
+# Static
+
+docker build -t infer -f Dockerfile.infer_release .
+docker build -t rats -f Dockerfile.rats_release . 
+docker build -t graudit -f Dockerfile.graudit_release .
+docker build -t mosca -f Dockerfile.mosca_release .
+docker build -t flaw  -f Dockerfile.flaw_release .
+docker build -t cocci -f Dockerfile.flaw_release .
+
+
+# Dynamic 
+
+## container with llvm, clang, gcc, AdressSanitizer
+docker build -t coverage -f Dockerfile.coverage_release . 
+docker build -t gtest -f Dockerfile.gtest_release .
+docker build -t dmalloc -f Dockerfile.dmalloc_release .
+docker build -t valgrind -f Dockerfile.valgrind_release .
+docker build -t defects -f Dockerfile.defects_release .
+docker build -t gzoltar -f Dockerfile.gzoltar_release .
+docker build -t inss -f Dockerfile.inss_release .
+docker build -t road Dockerfile.road_release .
+
+# Docker sec
+cd docker-bench-security && docker build --no-cache -t docker-bench-security .
