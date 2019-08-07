@@ -6,12 +6,22 @@
 # SETUP SECOPS VM ##
 ###################
 
+
+###### INIT #####
+chmod +x ./*
+
+
+
+
 ## ANCHORE
 ./anchore
-
 
 ## DOCKER-BENCH
 
 ./docker-bench
-cd docker-bench-security && docker build --no-cache -t docker-bench-security .
 
+# START PHASE
+#cd docker-bench-security && docker build --no-cache -t docker-bench-security .
+
+# Hadolint
+./hadolint

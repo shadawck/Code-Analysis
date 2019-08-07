@@ -1,4 +1,6 @@
 #!/bin/bash
-git clone https://github.com/docker/docker-bench-security.git
+cd ../build && git clone https://github.com/docker/docker-bench-security.git
 cd docker-bench-security
+
+# Start phase
 docker build --no-cache -t docker-bench-security .

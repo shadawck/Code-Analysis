@@ -1,0 +1,7 @@
+#!bin/bash 
+
+# clone repo
+
+cd ../build && git clone https://github.com/hadolint/hadolint 
+# dd Dockerfile in root dir to have correct path 
+cd hadolint && cp docker/Dockerfile ./
