@@ -21,11 +21,65 @@ RUN apt-get update && \
     gcc g++ make \
     build-essential  \
     cmake autoconf \
-    perl openjdk-8-jdk openjdk-8-jre \
+    ## For release see Dockerfile.dynamic_release ##
+################################################
+
+
+
+# dependency
+RUN apt-get update && \
+    mkdir -p /usr/share/man/man1 && \    
+    apt-get install -y \ 
+    git wget curl \
+    gcc g++ make \
+    build-essential  \
+    cmake autoconf \
     gcovr lcov \ 
     libdbi-perl \
     unzip \ 
-    ant  
+    ant \ 
+    openjdk-11-jdk openjdk-11-jre  
+
+
+
+
+# get Source and Build
+
+#################
+# Code coverage #
+#################
+
+### Google Test
+
+RUN git clone https://github.com/google/googletest && \
+    cd googletest && mkdir build && cd build && \
+    cmake ../ && make
+
+
+##########################
+# Memory error detection #
+##########################
+
+## Address sanitizer
+
+# Already part of GCC and LLVM 
+# If you want to build it from source : 
+# Don't forget to set llvm checkout path 
+
+#RUN apt-get install cmake llvm clang autoconf && \
+#    CMAKE_BUILD_TYPE=release && \
+#    LLVM_ENABLE_ASSERTIONS=ON && \
+#    LLVM_ENABLE_WERROR=ON && \
+#    LLVM_TARGETS_TO_BUILD=x86 && \
+#    [CC=clang CXX=clang++] cmake -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_ASSERTIONS=ON [-DLLVM_ENABLE_WERROR=ON] [-DLLVM_TARGETS_TO_BUILD=X86] /path/to/llvm/checkout && \
+#    make -j12 # build everything && \
+#    make check-all -j12 # build and run all tests (llvm+clang+ASan) && \
+:
+    gcovr lcov \ 
+    libdbi-perl \
+    unzip \ 
+    ant \ 
+      
 
 
 
@@ -72,7 +126,7 @@ RUN git clone https://github.com/google/googletest && \
 #    ./configure && make 
 
 # so we install the apt release.
-RUN apt-get install -y libdmalloc5 libdmalloc-dev
+RUN apt-get install -y libdmalloc5
 
 
 ## Valgrind
@@ -89,12 +143,9 @@ RUN git clone git://sourceware.org/git/valgrind.git &&  \
 ## Defect4J 
 
 RUN git clone https://github.com/rjust/defects4j && \ 
-    cd defects4j && \
-    cpan App:cpanminus && cpanm --installdeps . && \ 
-    ./init.sh
-
-ENV PATH="/defects4j/framework/bin:${PATH}"
- 
+    cd defects4j && ./init.sh && \
+    export PATH=$PATH:${PWD}/framework/bin && \
+    defects4j info -p Lang 
 
     # // TODO -> cpam DBI (+init)
 
@@ -109,30 +160,25 @@ RUN wget https://github.com/GZoltar/gzoltar/releases/download/v1.7.2/gzoltar-1.7
 # InSS/Mis-MCP => road2default
 RUN git clone https://github.com/higoramario/mis-mcp && \
     cd mis-mcp && ant && \ 
-    cp -r build/mis /mis && \ 
-    export INSS_HOME=/mis && \ 
-    chmod +x ${INSS_HOME}/bin/* 
-
-ENV PATH="${INSS_HOME}/bin:${PATH}"
+    cp -r build/mis ~/ && \ 
+    export INSS_HOME=~/mis && \ 
+    chmod +x INSS_HOME/bin/* && \ 
+    export PATH=$PATH:${INSS_HOME}/bin
 
 RUN git clone https://github.com/saeg/road2fault && \ 
     cd road2fault && ant && \ 
-    export ROAD2FAULT_HOME=/road2fault/build && \ 
-    chmod +x ${ROAD2FAULT_HOME}/bin/*
+    export ROAD2FAULT_HOME=~/road2fault/build && \ 
+    sudo chmod +x ${ROAD2FAULT_HOME}/bin/*
     
 
 # Linking 
 
 ## DMalloc
-# use it if you successed to build dmalloc from source
-#RUN ln -s dmalloc/dmalloc /usr/bin/dmalloc || cp dmalloc/dmalloc /usr/bin/dmalloc
+RUN ln -s dmalloc/dmalloc /usr/bin/dmalloc || cp dmalloc/dmalloc /usr/bin/dmalloc
 
 ## gzoltar
-RUN echo 'alias gzoltar="java -jar /gzoltar/lib/gzoltarcli.jar"' >> ~/.bashrc
-RUN . ~/.bashrc
+RUN alias gzoltar='java -jar /home/hug211mire/gzoltar/lib/gzoltarcli.jar' 
 
-#RUN export PATH=$PATH:/mis/bin
-#RUN export PATH=$PATH:/defects4j/framework/bin
 
 
 # Testing 
@@ -142,5 +188,6 @@ RUN gcovr --version
 RUN lcov --version
 RUN dmalloc --version
 RUN defects4j info -p Lang
-CMD ["gzoltar", "version"]
+RUN gzoltar version
+
 
