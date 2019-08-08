@@ -1,0 +1,7 @@
+FROM debian:stretch-slim
+
+
+RUN apt-get update --no-install-recommends && \
+    apt-get install -y git && \
+    git clone https://github.com/wireghoul/graudit/ && \
+    ln -s /graudit/graudit /usr/bin/graudit  
