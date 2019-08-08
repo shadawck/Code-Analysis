@@ -27,7 +27,7 @@ do
    DOCKER_TAG=${NAME_VERSION%_*}
 
    echo "LAUNCH STATIC DOCKER TOOLS"
-   docker build -t $DOCKER_TAG -f $f 
+   docker build -t $DOCKER_TAG -f $f . 
 done
 
 
@@ -35,8 +35,12 @@ done
 # Start docker for dynamic analysis #
 #####################################
 
+
 for f in $DOCKERFILES_D_R
 do
    echo "LAUCH DYNAMIC DOCKER TOOLS"
+   NAME_VERSION=${f#*Dockerfile.}
+   DOCKER_TAG=${NAME_VERSION%_*}
+
    echo "Processing $f file..."
 done

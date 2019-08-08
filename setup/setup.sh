@@ -14,7 +14,7 @@ chmod +x ../start/start.sh
 
 rm -rf ../build/*
 
-
+echo `pwd`
 
 ## ANCHORE
 ./anchore
