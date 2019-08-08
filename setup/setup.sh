@@ -9,6 +9,9 @@
 
 ###### INIT #####
 chmod +x ./*
+chmod +x ../start/start.sh
+
+
 rm -rf ../build/*
 
 
