@@ -15,7 +15,7 @@ docker build -t rats -f Dockerfile.rats_release .
 docker build -t graudit -f Dockerfile.graudit_release .
 docker build -t mosca -f Dockerfile.mosca_release .
 docker build -t flaw  -f Dockerfile.flaw_release .
-docker build -t cocci -f Dockerfile.flaw_release .
+docker build -t cocci -f Dockerfile.cocci_release .
 
 
 # Dynamic 
