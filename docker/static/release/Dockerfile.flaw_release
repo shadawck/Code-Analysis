@@ -1,8 +1,9 @@
-FROM debian:stretch-slim
+FROM fractalizer/debian_custom
 
-RUN apt-get update && \
-    apt-get install -y \
-      python python-pip
+RUN apt-get install --no-install-recommends -y  \
+      python-pip && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 ## FlawFinder
 RUN pip install flawfinder

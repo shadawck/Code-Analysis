@@ -1,7 +1,4 @@
-FROM debian:stretch-slim
+FROM fractalizer/debian_custom
 
-
-RUN apt-get update --no-install-recommends && \
-    apt-get install -y git && \
-    git clone https://github.com/wireghoul/graudit/ && \
+RUN git clone https://github.com/wireghoul/graudit/ && \
     ln -s /graudit/graudit /usr/bin/graudit  

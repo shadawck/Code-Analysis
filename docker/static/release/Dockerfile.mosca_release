@@ -1,12 +1,14 @@
-FROM debian
+FROM fractalizer/debian_custom
 
-RUN apt-get update && \
-    apt-get install -y \
+
+RUN apt-get install --no-install-recommends -y \
       ca-certificates \
-      git gcc make autoconf build-essential libpcre3-dev
- 
+      gcc make autoconf build-essential libpcre3-dev && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* 
 
 RUN  git clone https://github.com/CoolerVoid/Mosca && \
-      cd Mosca && \
-      make
+     cd Mosca && \
+     make
+
 RUN ln -s /Mosca/mosca /usr/bin/mosca

@@ -1,7 +1,8 @@
-FROM debian:stretch
+FROM fractalizer/debian_custom
 
-RUN apt-get update -y && \ 
-    apt-get install --no-install-recommends -y \
-      coccinelle 
+RUN  apt-get install --no-install-recommends -y \
+      coccinelle && \
+     apt-get clean && \
+     rm -rf /var/lib/apt/lists/*
 
 RUN spatch 

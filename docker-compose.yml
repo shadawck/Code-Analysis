@@ -1,6 +1,12 @@
 version: '3'
 
 services : 
+  debian_custom:
+    build:
+      context: ./docker/base/
+      dockerfile: Dockerfile.debian_custom
+    image: fractalizer/debian_custom:latest
+
   infer: 
     build:
       context: ./docker/static/release/
@@ -8,11 +14,88 @@ services :
     image: infer:latest
     volumes: 
      - target:/target
-
+    depends_on: 
+     - debian_custom
+ 
     healthcheck:
       test: ["CMD", "infer", "--version"]
-      interval: 1m30s
-      timeout: 10s
+      interval: 2m30s
+      timeout: 40s
+  
+  graudit: 
+    build: 
+      context: ./docker/static/release/
+      dockerfile: Dockerfile.graudit_release
+    image: graudit:latest
+    volumes:
+     - target:/target
+    depends_on:
+     - debian_custom
+  
+    healthcheck:
+      test: ["CMD", "graudit", "--version"]
+      interval: 2m30s
+      timeout: 40s
+    
+  mosca: 
+    build:  
+      context: ./docker/static/release/
+      dockerfile: Dockerfile.mosca_release 
+    image: mosca:latest
+    volumes:
+     - target:/target
+    depends_on:
+     - debian_custom
+ 
+    healthcheck:
+      test: ["CMD", "mosca", "--version"]
+      interval: 2m30s
+      timeout: 40s
+   
+  rats: 
+    build:
+      context: ./docker/static/release/
+      dockerfile: Dockerfile.rats_release
+    image: rats:latest
+    volumes:
+     - target:/target
+    depends_on:
+     - debian_custom
+
+    healthcheck:
+      test: ["CMD", "rats", "--version"]
+      interval: 2m30s
+      timeout: 40s
+   
+  flaw: 
+    build:
+      context: ./docker/static/release/
+      dockerfile: Dockerfile.flaw_release
+    image: flaw:latest
+    volumes:
+     - target:/target
+    depends_on: 
+     - debian_custom
+
+    healthcheck:
+      test: ["CMD", "flawfinder", "--version"]
+      interval: 2m30s
+      timeout: 40s
+
+  cocci: 
+    build:
+      context: ./docker/static/release/
+      dockerfile: Dockerfile.cocci_release
+    image: cocci:latest
+    volumes:
+     - target:/target
+    depends_on:
+     - debian_custom
+
+    healthcheck:
+      test: ["CMD", "spatch", "--version"]
+      interval: 2m30s
+      timeout: 40s
 
 volumes: 
   target:
