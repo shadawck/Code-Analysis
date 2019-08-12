@@ -1,0 +1,17 @@
+FROM fractalizer/debian_custom
+
+
+RUN mkdir -p /usr/share/man/man1 && \  
+    apt-get install -y --no-install-recommends \
+    wget unzip \
+    openjdk-8-jdk 
+
+
+## GZoltar 
+RUN wget https://github.com/GZoltar/gzoltar/releases/download/v1.7.2/gzoltar-1.7.2.201905090602.zip && \ 
+    unzip gzoltar-1.7.2.201905090602.zip -d gzoltar && \ 
+    rm -rf gzoltar-1.7.2.201905090602.zip
+
+# docker run --rm -it gzoltar java -jar /gzoltar/lib/gzoltarcli.jar
+RUN echo 'alias gzoltar="java -jar /gzoltar/lib/gzoltarcli.jar"' >> ~/.bashrc
+RUN . ~/.bashrc

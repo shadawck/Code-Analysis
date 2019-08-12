@@ -12,8 +12,8 @@ services :
       context: ./docker/static/release/
       dockerfile: Dockerfile.infer_release
     image: infer:latest
-    volumes: 
-     - target:/target
+    volumes:
+     - '/home/hug211mire/test/target:/opt/data'  
     depends_on: 
      - debian_custom
  

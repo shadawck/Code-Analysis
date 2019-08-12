@@ -1,0 +1,77 @@
+version: '3'
+
+services : 
+  debian_custom:
+    build:
+      context: ./docker/base/
+      dockerfile: Dockerfile.debian_custom
+    image: fractalizer/debian_custom:latest
+
+  coverage: 
+    build:
+      context: ./docker/dynamic/release/
+      dockerfile: Dockerfile.coverage_release
+    image: coverage:latest
+    volumes: 
+     - target:/target
+    depends_on: 
+     - debian_custom
+
+  dmalloc: 
+    build: 
+      context: ./docker/dynamic/release/
+      dockerfile: Dockerfile.dmalloc_release
+    image: dmalloc:latest
+    volumes:
+     - target:/target
+    depends_on:
+     - debian_custom
+  
+    healthcheck:
+      test: ["CMD", "dmalloc", "--version"]
+      interval: 2m30s
+      timeout: 40s
+    
+  gzoltar: 
+    build:  
+      context: ./docker/dynamic/release/
+      dockerfile: Dockerfile.gzoltar_release 
+    image: gzoltar:latest
+    volumes:
+     - target:/target
+    depends_on:
+     - debian_custom
+   
+  road_inss: 
+    build:
+      context: ./docker/dynamic/release/
+      dockerfile: Dockerfile.inss_release
+    image: inss:latest
+    volumes:
+     - target:/target
+    depends_on:
+     - debian_custom
+
+    healthcheck:
+      test: ["CMD", "alluses"]
+      interval: 2m30s
+      timeout: 40s
+   
+  valgrind: 
+    build:
+      context: ./docker/dynamic/release/
+      dockerfile: Dockerfile.valgrind_release
+    image: valgrind:latest
+    volumes:
+     - target:/target
+    depends_on: 
+     - debian_custom
+
+    healthcheck:
+      test: ["CMD", "valgrind", "--version"]
+      interval: 2m30s
+      timeout: 40s
+
+
+volumes: 
+  target:

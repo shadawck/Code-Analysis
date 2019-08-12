@@ -1,0 +1,43 @@
+FROM fractalizer/debian_custom
+
+RUN mkdir -p /usr/share/man/man1 && \
+    apt-get install -y --no-install-recommends \
+    openjdk-8-jdk ant  
+
+ENV INSS_HOME="/mis"
+ENV PATH="${INSS_HOME}/bin:${PATH}"
+ENV PATH="${INSS_HOME}/libs:${PATH}"
+
+
+# InSS/Mis-MCP => road2default
+RUN git clone https://github.com/higoramario/mis-mcp && \
+    cd mis-mcp && ant && \ 
+    cp -r build/mis /mis && \  
+    chmod +x ${INSS_HOME}/bin/* 
+
+
+RUN ln -s /mis/bin/alluses /usr/bin/alluses && \
+    ln -s /mis/bin/defuse /usr/bin/defuse && \
+    ln -s /mis/bin/instrumenter /usr/bin/instrumenter && \
+    ln -s /mis/bin/allusesextractor /usr/bin/allusesextractor
+
+
+# docker run -it --rm inss alluses
+# docker run -it --rm inss defuse
+# docker run -it --rm inss instrumenter
+
+ENV ROAD2FAULT_HOME="/road2fault/build"
+
+
+RUN cd / && git clone https://github.com/saeg/road2fault && \ 
+    cd road2fault && ant && \ 
+    chmod +x ${ROAD2FAULT_HOME}/bin/*
+
+RUN ln -s ${ROAD2FAULT_HOME}/bin/r2f_fb /usr/bin/r2f_fb && \ 
+    ln -s ${ROAD2FAULT_HOME}/bin/r2f_fb_mult /usr/bin/r2f_fb_mult && \
+    ln -s ${ROAD2FAULT_HOME}/bin/r2f_ls /usr/bin/r2f_ls && \
+    ln -s ${ROAD2FAULT_HOME}/bin/r2f_ls_mult /usr/bin/r2f_ls_mult && \
+    ln -s ${ROAD2FAULT_HOME}/bin/road2fault_mcp /usr/bin/road2fault_mcp && \
+    ln -s ${ROAD2FAULT_HOME}/bin/road2fault_mct /usr/bin/road2fault_mct && \
+    ln -s ${ROAD2FAULT_HOME}/bin/road2fault_rmcp /usr/bin/road2fault_rmcp && \ 
+    ln -s ${ROAD2FAULT_HOME}/bin/road2fault_unit /usr/bin/road2fault_unit 

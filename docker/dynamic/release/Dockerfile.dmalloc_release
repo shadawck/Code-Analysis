@@ -1,0 +1,4 @@
+FROM fractalizer/debian_custom
+
+RUN apt-get install -y --no-install-recommends \
+    libdmalloc5 libdmalloc-dev

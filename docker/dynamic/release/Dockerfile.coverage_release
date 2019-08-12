@@ -1,0 +1,10 @@
+FROM fractalizer/debian_custom 
+
+RUN apt-get install -y --no-install-recommends \ 
+    cmake build-essential \
+    lcov gcovr 
+
+RUN git clone https://github.com/google/googletest && \
+    cd googletest && mkdir build && cd build && \
+    cmake ../ && make
+
